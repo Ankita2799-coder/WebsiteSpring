@@ -1,4 +1,6 @@
 package com.tutorialproject.controller;
+import java.security.Principal;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -7,6 +9,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -71,13 +74,11 @@ public class TutController {
 		}
 		
 	}
+	@GetMapping("/current-user")
+	public UserModel getCurrentLoginedUser(Principal principal)
+	{
+		return (UserModel)UserDetailsService.loadUserByUsername(principal.getName());
+	}
 	
-	public UserRepo getUserRepo() {
-		return userRepo;
-	}
-
-	public void setUserRepo(UserRepo userRepo) {
-		this.userRepo = userRepo;
-	}
 
 }
