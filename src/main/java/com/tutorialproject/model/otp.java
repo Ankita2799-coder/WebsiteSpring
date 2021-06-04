@@ -1,24 +1,32 @@
 package com.tutorialproject.model;
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 @Entity
+@Table(name="otp",uniqueConstraints = @UniqueConstraint(columnNames={"email"}))
 public class otp {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name="otp_id")
 private int otp_id;
+@Column(name="email",unique = true)
 private String email;
-private String otp;
+@Column(name="Otp")
+private String Otp;
+@Column(name="otpRequestedTime")
 private Date otpRequestedTime;
 
 public otp(int otp_id, String email, String otp, Date otpRequestedTime) {
 	super();
 	this.otp_id = otp_id;
 	this.email = email;
-	this.otp = otp;
+	this.Otp = otp;
 	this.otpRequestedTime = otpRequestedTime;
    
 }
@@ -41,16 +49,16 @@ public void setEmail(String email) {
 	this.email = email;
 }
 public String getOtp() {
-	return otp;
+	return Otp;
 }
 public void setOtp(String otp) {
-	this.otp = otp;
+	this.Otp = otp;
 }
 public otp(int otp_id, String email, String otp) {
 	super();
 	this.otp_id = otp_id;
 	this.email = email;
-	this.otp = otp;
+	this.Otp = otp;
 }
 public otp() {
 	super();

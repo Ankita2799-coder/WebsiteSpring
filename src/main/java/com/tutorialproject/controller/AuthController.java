@@ -2,6 +2,8 @@ package com.tutorialproject.controller;
 import java.security.Principal;
 import java.util.Date;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -66,15 +68,31 @@ public class AuthController {
     	 return ResponseEntity.ok(new JwtResponse(jwt));
  	}
 	
-	@PostMapping("tutosign")
-	public ResponseEntity<?> signUser(@RequestBody UserModel umodel){
+	@PostMapping("register/{otp}")
+	public ResponseEntity<?> signUser(@RequestBody UserModel umodel,@PathVariable("otp") String otp){
 //		System.out.println(umodel.getEmail());
-		
+		//check existing user
 		UserModel um=userRepo.findByEmail(umodel.getEmail());
 		if(um == null)
 		{
+			//validate otp
+			otp	dbOtp=otpRepo.findByEmail(umodel.getEmail());
+			if(dbOtp==null)
+			{
+				System.out.println("enter valid otp");
+				return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body("Enter Valid Otp");
+			}
+			System.out.println((dbOtp.getOtpRequestedTime().getTime()+300000)/60000);
+			System.out.println(System.currentTimeMillis()/60000);
+			
+			if(dbOtp.getOtp().equals(otp) && dbOtp.getOtpRequestedTime().getTime()+300000>=System.currentTimeMillis())
+			{
 			 userRepo.save(umodel);
 			 return new ResponseEntity<Object>(202, HttpStatus.OK);
+			}
+			else {
+				return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body("Otp Expired Request new one");
+			}
 		}
 		else
 		{
@@ -87,7 +105,9 @@ public class AuthController {
 	{
 		return (UserModel)UserDetailsService.loadUserByUsername(principal.getName());
 	}
+	
 	@GetMapping("/generate-otp/{email}")
+  @Transactional
 	public ResponseEntity<?> generateOtp(@PathVariable("email") String email)
 	{
 		int[] otpl=mailService.generateOTP();
@@ -106,11 +126,21 @@ public class AuthController {
 		}
 		//if email sent
 		otp otpobj=new otp();
+		otp otpexist=otpRepo.findByEmail(email);
+		if(otpexist==null) {
 		otpobj.setEmail(email);
 		otpobj.setOtp(otp);
 		otpobj.setOtpRequestedTime(new Date());
 		otpRepo.save(otpobj);
+		}
+		else {
+			otpobj.setEmail(email);
+			otpobj.setOtp(otp);
+			otpobj.setOtpRequestedTime(new Date());
+			otpRepo.updateByEmail(otp,new Date(),email);
+		}
 		return new ResponseEntity(200,HttpStatus.OK);
+		
 	}
 	
 

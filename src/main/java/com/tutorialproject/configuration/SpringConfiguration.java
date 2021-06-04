@@ -32,7 +32,7 @@ private JwtAuthenticationEntryPoint unAuthorizedHandler;
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.csrf().disable().cors().disable().authorizeRequests().
-		antMatchers("/tutologin","/tutosign","/generate-otp/**").permitAll()
+		antMatchers("/tutologin","/register/**","/generate-otp/**").permitAll()
 		.antMatchers(HttpMethod.OPTIONS).permitAll()
 		.anyRequest().authenticated()
 		.and().
