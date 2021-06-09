@@ -1,6 +1,4 @@
 package com.tutorialproject.model;
-
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -13,7 +11,6 @@ import javax.persistence.Id;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
 @Entity
 public class UserModel implements UserDetails
 {
@@ -22,21 +19,44 @@ public class UserModel implements UserDetails
 	 int user_id;
 	@Column(name="email",length=50)
 	String email;
+	@Column(name="name",length=50)
 	 String name;
+	@Column(name="username",length=50)
 	 String username;
+	@Column(name="password",length=50)
 	 String password;
-	 
-	public UserModel() {
-		super();
-	}
-	public UserModel(int user_id, String email, String name, String username, String password) {
+	@Column(name="phone",length=50)
+	 String phone;
+	@Column(name="cpassword",length=50)
+	 String cpassword;
+	public UserModel(int user_id, String email, String name, String username, String password, String phone,
+			String cpassword) {
 		super();
 		this.user_id = user_id;
 		this.email = email;
 		this.name = name;
 		this.username = username;
 		this.password = password;
+		this.phone = phone;
+		this.cpassword = cpassword;
 	}
+	public String getCpassword() {
+		return cpassword;
+	}
+	public void setCpassword(String cpassword) {
+		this.cpassword = cpassword;
+	}
+	
+	public String getPhone() {
+		return phone;
+	}
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+	public UserModel() {
+		super();
+	}
+	
 	public int getUser_id() {
 		return user_id;
 	}
