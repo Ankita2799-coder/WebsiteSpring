@@ -1,9 +1,11 @@
 package com.tutorialproject.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 
 @Entity
 public class BlogsModel 
@@ -11,6 +13,13 @@ public class BlogsModel
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	int id;
+	String blogid;
+	String heading;
+	@Column(name = "content",length =1337)
+	String content;
+	@Lob 
+	@Column(name = "detailBlog",length =1337)
+	String detailBlog;
 	public BlogsModel(int id, String blogid, String heading, String content, String detailBlog) {
 		super();
 		this.id = id;
@@ -25,10 +34,7 @@ public class BlogsModel
 	public void setId(int id) {
 		this.id = id;
 	}
-	String blogid;
-	String heading;
-	String content;
-	String detailBlog;
+
 	
 	public String getDetailBlog() {
 		return detailBlog;
