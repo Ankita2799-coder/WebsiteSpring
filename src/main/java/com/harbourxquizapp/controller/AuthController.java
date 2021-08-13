@@ -53,11 +53,11 @@ public class AuthController {
  	}
     @RequestMapping(value="/login", method = { RequestMethod.POST })
  	public ResponseEntity<?> getUser(@RequestBody JwtRequest authenticationRequest) throws Exception {
-    	 System.out.println("USername"+authenticationRequest.getUsername()+"Password"+authenticationRequest.getPassword());
+    	 System.out.println("email"+authenticationRequest.getEmail()+"Password"+authenticationRequest.getPassword());
     	 //Authentication Happens here
     	 try {
     	System.out.println("authentication started");
-    	 authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(), authenticationRequest.getPassword()));
+    	 authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authenticationRequest.getEmail(), authenticationRequest.getPassword()));
     	 System.out.println("authenticatiion performed successfully");
     	 }
     	 catch(BadCredentialsException e)
@@ -72,7 +72,7 @@ public class AuthController {
     	 }
     	 //Creation of jwt
     	 System.out.println("creation of jwt");
-    	 final UserDetails userDetails=UserDetailsService.loadUserByUsername(authenticationRequest.getUsername());
+    	 final UserDetails userDetails=UserDetailsService.loadUserByUsername(authenticationRequest.getEmail());
     	 System.out.println("fetched userdetails");
     	 final String jwt=jwtTokenUtil.generateToken(userDetails);
     	 System.out.println("token generated"+jwt);

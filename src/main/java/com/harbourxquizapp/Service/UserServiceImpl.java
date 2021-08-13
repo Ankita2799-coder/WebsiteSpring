@@ -28,7 +28,7 @@ public UserModel createUser(UserModel user ) throws Exception
 	role.setRoleId(45L);
 	role.setRoleName("ROLE_USER");
 	user.setPassword(passwordEncoder.encode(user.getPassword()));
-	user.setCpassword(passwordEncoder.encode(user.getCpassword()));
+//	user.setCpassword(passwordEncoder.encode(user.getCpassword()));
 	Set<UserRole> roles=new HashSet<UserRole>();
 	UserRole userRole=new UserRole();
 	userRole.setRole(role);
@@ -36,7 +36,8 @@ public UserModel createUser(UserModel user ) throws Exception
 	roles.add(userRole);
 	System.out.println("inside create user method:: userservice impl");
 	UserModel local=this.userRepo.findByUsername(user.getUsername());
-	if(local!=null)
+	UserModel local1=this.userRepo.findByEmail(user.getUsername());
+	if(local!=null || local1!=null)
 	{
 	throw new Exception("User already present !!");
 	}
